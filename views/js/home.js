@@ -93,9 +93,114 @@ async function loadStudents(examName) {
     }
 }
 
+
+let ws;
+let username = '';
+const MAX_MESSAGES = 50; // Limit message history
+const chatHistories = {}; // Store chat histories for different users
+
+function initializeWebSocket() {
+    ws = new WebSocket("ws://127.0.0.1:3001");
+
+    ws.onopen = () => {
+        console.log("Connected to WebSocket Server");
+        console.log("Sending username:", username);
+        ws.send(username);
+    };
+
+    ws.onmessage = event => {
+        console.log("Received WebSocket message:", event.data);
+        const data = JSON.parse(event.data);
+        
+        console.log("Parsed message data:", data);
+        
+        if (data.type === "request_username") {
+            console.log("Received username request");
+            ws.send(username);
+            return;
+        }
+
+        if (data.type === "message") {
+            console.log("Handling incoming message:", data);
+            handleIncomingMessage(data.from, data.message);
+        }
+    };
+
+    ws.onerror = (error) => {
+        console.error("WebSocket Error:", error);
+    };
+
+    ws.onclose = (event) => {
+        console.log("WebSocket disconnected. Reconnecting...");
+        console.log("Close event details:", event);
+        setTimeout(initializeWebSocket, 3000);
+    };
+}
+
+function updateAreaIscrizioni() {
+    const area = document.querySelector(".exam-list");
+    
+    // Clear existing content
+    area.innerHTML = '';
+    
+    // Use a Set to ensure unique exams
+    const uniqueExams = new Set(exams);
+    
+    // Populate the area with unique exams
+    uniqueExams.forEach(exam => {
+        const examItem = document.createElement('div');
+        examItem.className = 'exam-item';
+        examItem.innerHTML = `
+            <h4>${exam}</h4>
+            <button onclick="viewStudents('${exam}')" class="view-students-button">Visualizza Iscritti</button>
+            <button onclick="openChat('${exam}')" class="chat-button">Chat</button>
+        `;
+        area.appendChild(examItem);
+    });
+}
+
+function openChat(examName) {
+    // Placeholder for exam-wide chat functionality
+    // You can implement a group chat or modify as needed
+    alert(`Chat for exam: ${examName}`);
+}
+
+function handleIncomingMessage(sender, message) {
+    // Check if chat is open with this sender
+    const chatContainer = document.getElementById('chat-container');
+    const currentChatUser = chatContainer ? 
+        chatContainer.querySelector('.chat-header h4').textContent.replace('Chat con ', '') 
+        : null;
+
+    if (currentChatUser === sender) {
+        displayMessage(sender, message, true);
+    } else {
+        // Notification for new message
+        showMessageNotification(sender, message);
+    }
+
+    // Save to local storage (both sent and received)
+    saveMessageToLocalStorage(sender, message, true);
+}
+function showMessageNotification(sender, message) {
+    // Create a toast-like notification
+    const notification = document.createElement('div');
+    notification.className = 'message-notification';
+    notification.innerHTML = `
+        <strong>${sender}:</strong> ${message}
+        <button onclick="openChatWithStudent('${sender}')">Open</button>
+    `;
+    document.body.appendChild(notification);
+
+    // Remove after 5 seconds
+    setTimeout(() => {
+        document.body.removeChild(notification);
+    }, 5000);
+}
+
 function openChatWithStudent(studentName) {
     let chatContainer = document.getElementById('chat-container');
-    if (chatContainer) return chatContainer.remove();
+    if (chatContainer) chatContainer.remove();
 
     chatContainer = document.createElement('div');
     chatContainer.id = 'chat-container';
@@ -105,73 +210,96 @@ function openChatWithStudent(studentName) {
             <button class="close-chat" onclick="closeChat()">✖</button>
         </div>
         <div class="chat-messages">
-            <p>Benvenuto nella chat con ${studentName}!</p>
+            ${loadChatHistory(studentName)}
         </div>
         <div class="chat-input">
-            <input type="text" id="chat-message" placeholder="Scrivi un messaggio..." />
+            <input type="text" id="chat-message" placeholder="Scrivi un messaggio..." 
+                   onkeypress="handleChatInputKeyPress(event, '${studentName}')" />
             <button onclick="sendMessageToStudent('${studentName}')">Invia</button>
         </div>
     `;
     document.body.appendChild(chatContainer);
-    loadChatMessages(studentName);
+
+    // Focus on input
+    document.getElementById('chat-message').focus();
 }
 
-function closeChat() {
-    const chatContainer = document.getElementById('chat-container');
-    if (chatContainer) chatContainer.remove();
-}
-
-function loadChatMessages(studentName) {
-    const messagesContainer = document.querySelector('.chat-messages');
-    messagesContainer.innerHTML += `
-        <div class="message"><strong>${studentName}:</strong> Ciao!</div>
-    `;
-}
-
-function sendMessageToStudent(studentName) {
-    const message = document.getElementById('chat-message').value.trim();
-    if (message) {
-        const messagesContainer = document.querySelector('.chat-messages');
-        messagesContainer.innerHTML += `
-            <div class="message"><strong>Io:</strong> ${message}</div>
-        `;
-        document.getElementById('chat-message').value = '';
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        ws.send(JSON.stringify({ to: studentName, message }));
+function handleChatInputKeyPress(event, studentName) {
+    if (event.key === 'Enter') {
+        sendMessageToStudent(studentName);
     }
 }
 
-let ws;
-function initializeWebSocket() {
-    ws = new WebSocket("ws://127.0.0.1:3001");
-    const username = document.getElementById("username").textContent;
-    ws.onopen = () => {
-        console.log("Connesso al WebSocket Server");
-        ws.send(username);
-    };
-    ws.onmessage = event => {
-        const data = JSON.parse(event.data);
-        if (data.type === "message") displayIncomingMessage(data.from, data.message);
-    };
-    ws.onclose = () => {
-        console.log("WebSocket disconnesso. Riconnessione...");
-        setTimeout(initializeWebSocket, 3000);
-    };
+function sendMessageToStudent(studentName) {
+    const messageInput = document.getElementById('chat-message');
+    const message = messageInput.value.trim();
+    
+    if (message) {
+        // Display sent message
+        displayMessage(username, message, false);
+        
+        // Send via WebSocket
+        ws.send(JSON.stringify({ to: studentName, message }));
+        
+        // Save to local storage (both sent and received)
+        saveMessageToLocalStorage(studentName, message, false);
+        
+        // Clear input
+        messageInput.value = '';
+    }
+}
+function displayMessage(sender, message, isIncoming) {
+    const messagesContainer = document.querySelector('.chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isIncoming ? 'incoming' : 'outgoing'}`;
+    messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function displayIncomingMessage(sender, message) {
-    const messagesContainer = document.querySelector('.chat-messages');
-    messagesContainer.innerHTML += `
-        <div class="message"><strong>${sender}:</strong> ${message}</div>
-    `;
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+function saveMessageToLocalStorage(correspondent, message, isIncoming) {
+    const key = `chat_${correspondent}`;
+    
+    // Retrieve existing chat history or initialize
+    let chatHistory = JSON.parse(localStorage.getItem(key) || '[]');
+
+    // Add new message
+    chatHistory.push({
+        sender: isIncoming ? correspondent : username,
+        message,
+        timestamp: new Date().toISOString(),
+        type: isIncoming ? 'incoming' : 'outgoing'
+    });
+
+    // Limit message history
+    if (chatHistory.length > MAX_MESSAGES) {
+        chatHistory = chatHistory.slice(-MAX_MESSAGES);
+    }
+
+    // Save to localStorage
+    localStorage.setItem(key, JSON.stringify(chatHistory));
+}
+
+function loadChatHistory(correspondent) {
+    const key = `chat_${correspondent}`;
+    
+    // Retrieve chat history
+    const chatHistory = JSON.parse(localStorage.getItem(key) || '[]');
+
+    // Generate HTML for chat history
+    return chatHistory.map(msg => 
+        `<div class="message ${msg.type}">
+            <strong>${msg.sender}:</strong> ${msg.message}
+        </div>`
+    ).join('');
 }
 
 async function test() {
     try {
         const response = await fetch('/api/get_username');
-        document.getElementById('username').textContent = await response.text();
+        username = await response.text();
+        initializeWebSocket();
     } catch (err) {
         console.error(err);
     }
@@ -179,6 +307,5 @@ async function test() {
 
 document.addEventListener('DOMContentLoaded', () => {
     test();
-    initializeWebSocket();
     fetchUserExams();
 });

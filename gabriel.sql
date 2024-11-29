@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 12:03 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Creato il: Nov 26, 2024 alle 09:48
+-- Versione del server: 10.4.32-MariaDB
+-- Versione PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `esami`
+-- Struttura della tabella `esami`
 --
 
 CREATE TABLE `esami` (
@@ -36,30 +36,40 @@ CREATE TABLE `esami` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `iscrizioni`
+-- Struttura della tabella `iscrizioni`
 --
 
 CREATE TABLE `iscrizioni` (
   `ID` int(11) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT -1,
-  `exam_name` varchar(255) NOT NULL,
-  `username` varchar(255) DEFAULT NULL
+  `exam_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `iscrizioni`
+-- Dump dei dati per la tabella `iscrizioni`
 --
 
-INSERT INTO `iscrizioni` (`ID`, `user_id`, `exam_name`, `username`) VALUES
-(90, 1, 'Sistemi Operativi', 'admin'),
-(91, 2, 'Sistemi Operativi', 'gabriel'),
-(92, 1, 'Reti di Calcolatori', 'admin'),
-(93, 1, 'Reti di Calcolatori', 'admin');
+INSERT INTO `iscrizioni` (`ID`, `user_id`, `exam_name`) VALUES
+(83, 1, 'Sistemi Operativi');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utenti`
+-- Struttura della tabella `messaggi`
+--
+
+CREATE TABLE `messaggi` (
+  `ID` int(11) NOT NULL,
+  `sender` varchar(255) NOT NULL,
+  `receiver` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `utenti`
 --
 
 CREATE TABLE `utenti` (
@@ -69,7 +79,7 @@ CREATE TABLE `utenti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `utenti`
+-- Dump dei dati per la tabella `utenti`
 --
 
 INSERT INTO `utenti` (`ID`, `username`, `password`) VALUES
@@ -77,46 +87,58 @@ INSERT INTO `utenti` (`ID`, `username`, `password`) VALUES
 (2, 'gabriel', '$2a$10$D66i3USw//Svyhm8RLu3IO5aCDdfb.jRIjbhI5Tw8Dj6awM06VHxW');
 
 --
--- Indexes for dumped tables
+-- Indici per le tabelle scaricate
 --
 
 --
--- Indexes for table `esami`
+-- Indici per le tabelle `esami`
 --
 ALTER TABLE `esami`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `iscrizioni`
+-- Indici per le tabelle `iscrizioni`
 --
 ALTER TABLE `iscrizioni`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `utenti`
+-- Indici per le tabelle `messaggi`
+--
+ALTER TABLE `messaggi`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT for table `esami`
+-- AUTO_INCREMENT per la tabella `esami`
 --
 ALTER TABLE `esami`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `iscrizioni`
+-- AUTO_INCREMENT per la tabella `iscrizioni`
 --
 ALTER TABLE `iscrizioni`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
--- AUTO_INCREMENT for table `utenti`
+-- AUTO_INCREMENT per la tabella `messaggi`
+--
+ALTER TABLE `messaggi`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `utenti`
 --
 ALTER TABLE `utenti`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
