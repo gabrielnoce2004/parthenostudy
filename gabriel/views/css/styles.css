@@ -1,0 +1,120 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 360px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.login-form h2 {
+    font-size: 24px;
+    color: #347ba8;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background: #f9f9f9;
+    outline: none;
+    transition: border 0.3s ease, background 0.3s ease;
+}
+
+.form-group input:focus {
+    border: 2px solid #347ba8;
+    background: #ffffff;
+}
+
+.password-field {
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex: 1;
+}
+
+.password-field .toggle-password {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+.form-options {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.btn-login {
+    width: 100%;
+    background: #347ba8;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background: #255f7c;
+}
+
+.btn-fingerprint {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #cccccc;
+    margin: 10px 0;
+}
+
+.btn-fingerprint:hover {
+    color: #347ba8;
+}
+
+.form-footer a {
+    color: #347ba8;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
