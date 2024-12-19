@@ -1,0 +1,315 @@
+/* Generale */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Profilo */
+.profile-avatar img {
+    border: 5px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2, p {
+    margin: 0;
+}
+
+/* Navbar */
+.navbar {
+    border-bottom: 3px solid #0056b3;
+}
+
+/* Sezione Profilo */
+header {
+    background-color: #007bff;
+    color: #fff;
+}
+
+header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Card degli esami */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    transition: transform 0.2s, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-body h4 {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.card-body button {
+    transition: background-color 0.2s, transform 0.2s;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+.card-body button:hover {
+    transform: scale(1.1);
+    background-color: #218838;
+}
+
+/* Area Iscrizioni */
+#exam-list {
+    margin-top: 20px;
+}
+
+.exam-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.exam-item:hover {
+    background-color: #f1f1f1;
+}
+
+.exam-item h4 {
+    font-size: 1.1rem;
+    color: #007bff;
+}
+
+
+/* Sezione Chat */
+.chat-messages {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+}
+
+.message {
+    max-width: 70%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.message.incoming {
+    background-color: #e9ecef;
+    align-self: flex-start;
+}
+
+.message.outgoing {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+}
+
+/* Contenitore della Chat */
+#chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-height: 500px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chat-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.chat-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.chat-header button:hover {
+    color: #ff6666;
+}
+
+.chat-input {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+.chat-input button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Lista degli Studenti */
+#students-container {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    width: 400px;
+    max-height: 60%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 15px;
+}
+
+.students-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.students-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.students-header .close-container {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+}
+
+.students-list {
+    margin-top: 10px;
+}
+
+.student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s;
+}
+
+.student-item:hover {
+    background-color: #f1f1f1;
+}
+
+.student-item button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.student-item .btn-info {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.student-item .btn-info:hover {
+    background-color: #117a8b;
+    transform: scale(1.05);
+}
+/* Pulsanti per Iscrizione/Disiscrizione */
+.exam-item button {
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.exam-item button.iscrizione {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.exam-item button.iscrizione:hover {
+    background-color: #218838;
+    border-color: #218838;
+    transform: translateY(-2px);
+}
+
+.exam-item button.iscrizione i {
+    font-size: 1.2rem;
+}
+
+.exam-item button.disiscrizione {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.exam-item button.disiscrizione:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.exam-item button.disiscrizione i {
+    font-size: 1.2rem;
+}
